@@ -27,31 +27,39 @@ public class Cuenta {
   }
 
   public void poner(double cuanto) { //Duplicated Code - Long Method
-    if (cuanto <= 0) {
-      throw new MontoNegativoException(cuanto + ": el monto a ingresar debe ser un valor positivo");
-    }
-
-    if (getMovimientos().stream().filter(movimiento -> movimiento.getDeposito()).count() >= 3) {
-      throw new MaximaCantidadDepositosException("Ya excedio los " + 3 + " depositos diarios");
-    }
-
+    this.montoNegativo(cuanto);
+    this.maximaCantidadDepositos();
     new Movimiento(LocalDate.now(), cuanto, true).agregateA(this);
   }
 
   public void sacar(double cuanto) { //Duplicated Code - Long Method
-    if (cuanto <= 0) {
+    this.montoNegativo(cuanto);
+    this.saldoMenor(cuanto);
+    this.limiteDeExtraccion(cuanto);
+    new Movimiento(LocalDate.now(), cuanto, false).agregateA(this);
+  }
+
+  public void montoNegativo(double cuanto) {
+    if (cuanto <= 0)
       throw new MontoNegativoException(cuanto + ": el monto a ingresar debe ser un valor positivo");
-    }
-    if (getSaldo() - cuanto < 0) {
+  }
+
+  public void maximaCantidadDepositos() {
+    if (getMovimientos().stream().filter(Movimiento::getDeposito).count() >= 3)
+      throw new MaximaCantidadDepositosException("Ya excedio los " + 3 + " depositos diarios");
+  }
+
+  public void saldoMenor(double cuanto) {
+    if (getSaldo() - cuanto < 0)
       throw new SaldoMenorException("No puede sacar mas de " + getSaldo() + " $");
-    }
+  }
+
+  public void limiteDeExtraccion(double cuanto) {
     double montoExtraidoHoy = getMontoExtraidoA(LocalDate.now());
     double limite = 1000 - montoExtraidoHoy;
-    if (cuanto > limite) {
+    if (cuanto > limite)
       throw new MaximoExtraccionDiarioException("No puede extraer mas de $ " + 1000
           + " diarios, límite: " + limite);
-    }
-    new Movimiento(LocalDate.now(), cuanto, false).agregateA(this);
   }
 
   public void agregarMovimiento(Movimiento movimiento) { // Long Parameter List
@@ -76,5 +84,4 @@ public class Cuenta {
   public void setSaldo(double saldo) {
     this.saldo = saldo;
   }
-
 }

@@ -41,12 +41,12 @@ public class Movimiento {
   }
 
 
-  public void agregateA(Cuenta cuenta) { // Message Chains
+  public void agregateA(Cuenta cuenta) {
     cuenta.setSaldo(calcularValor(cuenta));
     cuenta.agregarMovimiento(this);
   }
 
-  public double calcularValor(Cuenta cuenta) { // Message Chains
+  public double calcularValor(Cuenta cuenta) { 
     if (this.getDeposito()) {
       return cuenta.getSaldo() + getMonto();
     } else {

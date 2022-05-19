@@ -75,4 +75,24 @@ public class MonederoTest {
     Movimiento unMovimiento = new Movimiento(LocalDate.now(),300, true);
     assertEquals(unMovimiento.getFecha(), LocalDate.now());
   }
+
+  @Test
+  public void depositarDinero(){
+    cuenta.poner(deposito().getMonto());
+    assertEquals(1000, cuenta.getSaldo());
+  }
+  @Test
+  public void extraccionDinero() {
+    cuenta.poner(deposito().getMonto());
+    cuenta.sacar(extraccion().getMonto());
+    assertEquals(extraccion().getMonto(), cuenta.getSaldo());
+  }
+
+  public Movimiento deposito() {
+    return new Movimiento(LocalDate.now(), 1000, true);
+  }
+
+  public Movimiento extraccion() {
+    return new Movimiento(LocalDate.now(), 500, false);
+  }
 }
