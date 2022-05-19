@@ -36,13 +36,10 @@ public class Movimiento {
     return this.fecha.equals(fecha);
   }
 
-  public boolean isDeposito() {
+  public boolean getDeposito() {
     return esDeposito;
   }
 
-  public boolean isExtraccion() {
-    return !esDeposito;
-  }
 
   public void agregateA(Cuenta cuenta) { // Message Chains
     cuenta.setSaldo(calcularValor(cuenta));
@@ -50,7 +47,7 @@ public class Movimiento {
   }
 
   public double calcularValor(Cuenta cuenta) { // Message Chains
-    if (esDeposito) {
+    if (this.getDeposito()) {
       return cuenta.getSaldo() + getMonto();
     } else {
       return cuenta.getSaldo() - getMonto();
